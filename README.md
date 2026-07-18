@@ -2,6 +2,8 @@
 
 **ArenaFlow** is a premium, GenAI-enabled stadium operations command center and spectator companion application built for the FIFA World Cup 2026™. The solution is designed to optimize stadium operations, logistics, crowd management, accessibility routing, and multilingual assistance. It leverages the official **Google Gemini API** (`gemini-3.5-flash`) via the client-side `@google/generative-ai` SDK, wrapped in a high-performance React + Tailwind CSS Single Page Application (SPA).
 
+**Live Application Demo:** [https://arena-flow-7aeu9ihrn-yemmmyc.vercel.app](https://arena-flow-7aeu9ihrn-yemmmyc.vercel.app)
+
 ---
 
 ## 🏟️ Challenge Vertical & Target Personas
