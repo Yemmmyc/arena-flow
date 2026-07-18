@@ -94,11 +94,13 @@ Open **`http://localhost:3000`** in your browser. Click the **Settings (gear ico
 
 ## 🌐 Live Demo & Instant Deployment
 
-ArenaFlow is ready to be hosted publicly on Vercel or Netlify with zero configuration:
+The application is hosted live and accessible at:
+👉 **[https://arena-flow-7aeu9ihrn-yemmmyc.vercel.app](https://arena-flow-7aeu9ihrn-yemmmyc.vercel.app)**
 
+To deploy your own copy on Vercel or Netlify with zero configuration:
 1. Create a free account on [Vercel](https://vercel.com).
 2. Connect your GitHub account and import this `arena-flow` repository.
-3. Click **Deploy**. Vercel will automatically build and publish your project, providing a secure `https://` live link.
+3. Click **Deploy**. Vercel will automatically build and publish your project.
 
 ---
 
