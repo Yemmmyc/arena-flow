@@ -5,26 +5,70 @@ import {
 } from 'lucide-react';
 import { getOperationsMitigationPlan } from '../services/gemini';
 
-export default function StaffDashboard() {
-  const [gates, setGates] = useState([
-    { name: 'Gate A (North Entrance)', flow: 'Normal', capacity: 34, status: 'safe' },
-    { name: 'Gate B (Transit Plaza)', flow: 'Moderate', capacity: 58, status: 'warning' },
-    { name: 'Gate C (East Boulevard)', flow: 'Critical Bottleneck', capacity: 92, status: 'danger' },
-    { name: 'Gate D (Rideshare Loop)', flow: 'Low', capacity: 18, status: 'safe' },
-  ]);
-
-  const [incidents, setIncidents] = useState([
-    { id: 1, gate: 'Gate C', type: 'Crowd Congestion', density: '92% Capacity', description: 'Heavy backups at biometric screening lanes due to scanner calibration issue.', status: 'Active', time: '10m ago' },
-    { id: 2, gate: 'Transit Plaza', type: 'Bus Transit Delay', density: 'Moderate', description: 'Light rail shuttle temporarily delayed by traffic. Volunteer dispatch needed.', status: 'Active', time: '23m ago' },
-  ]);
-
-  const [selectedIncident, setSelectedIncident] = useState(incidents[0]);
+export default function StaffDashboard({ stadium = 'metlife' }) {
+  const [gates, setGates] = useState([]);
+  const [incidents, setIncidents] = useState([]);
+  const [selectedIncident, setSelectedIncident] = useState(null);
   const [mitigationPlan, setMitigationPlan] = useState('');
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
   const [newGate, setNewGate] = useState('Gate A');
   const [newType, setNewType] = useState('Congestion');
   const [newDesc, setNewDesc] = useState('');
   const [stats, setStats] = useState({ totalFans: 68420, gateAverage: '50.5s', activeAlerts: 2 });
+
+  useEffect(() => {
+    let initialGates = [];
+    let initialIncidents = [];
+    let initialGate = 'Gate A';
+    let baseFans = 68420;
+
+    if (stadium === 'sofi') {
+      initialGates = [
+        { name: 'Entry 1 (Century Blvd)', flow: 'Normal', capacity: 34, status: 'safe' },
+        { name: 'Entry 5 (Transit Hub)', flow: 'Moderate', capacity: 58, status: 'warning' },
+        { name: 'Entry 7 (Lake Boulevard)', flow: 'Critical Bottleneck', capacity: 92, status: 'danger' },
+        { name: 'Entry 11 (Rideshare Lot)', flow: 'Low', capacity: 18, status: 'safe' },
+      ];
+      initialIncidents = [
+        { id: 1, gate: 'Entry 7', type: 'Crowd Congestion', density: '92% Capacity', description: 'Heavy congestion at biometric verification due to ticket calibration issues on entry gate 7.', status: 'Active', time: '10m ago' },
+        { id: 2, gate: 'Entry 5', type: 'Bus Transit Delay', density: 'Moderate', description: 'LA Metro shuttle delay on Prairie Ave. Staff dispatch required.', status: 'Active', time: '23m ago' },
+      ];
+      initialGate = 'Entry 1';
+      baseFans = 70240;
+    } else if (stadium === 'azteca') {
+      initialGates = [
+        { name: 'Acceso 1 (Calzada Tlalpan)', flow: 'Normal', capacity: 34, status: 'safe' },
+        { name: 'Acceso 2 (Estacionamiento)', flow: 'Moderate', capacity: 58, status: 'warning' },
+        { name: 'Acceso 3 (Insurgentes)', flow: 'Critical Bottleneck', capacity: 92, status: 'danger' },
+        { name: 'Acceso 4 (Metrobús)', flow: 'Low', capacity: 18, status: 'safe' },
+      ];
+      initialIncidents = [
+        { id: 1, gate: 'Acceso 3', type: 'Crowd Congestion', density: '92% Capacity', description: 'Congestion at biometric checkpoints near Acceso 3.', status: 'Active', time: '10m ago' },
+        { id: 2, gate: 'Acceso 2', type: 'Bus Transit Delay', density: 'Moderate', description: 'Tlalpan shuttle delay. Crowd marshals notified.', status: 'Active', time: '23m ago' },
+      ];
+      initialGate = 'Acceso 1';
+      baseFans = 87500;
+    } else { // metlife
+      initialGates = [
+        { name: 'Gate A (North Entrance)', flow: 'Normal', capacity: 34, status: 'safe' },
+        { name: 'Gate B (Transit Plaza)', flow: 'Moderate', capacity: 58, status: 'warning' },
+        { name: 'Gate C (East Boulevard)', flow: 'Critical Bottleneck', capacity: 92, status: 'danger' },
+        { name: 'Gate D (Rideshare Loop)', flow: 'Low', capacity: 18, status: 'safe' },
+      ];
+      initialIncidents = [
+        { id: 1, gate: 'Gate C', type: 'Crowd Congestion', density: '92% Capacity', description: 'Heavy backups at biometric screening lanes due to scanner calibration issue.', status: 'Active', time: '10m ago' },
+        { id: 2, gate: 'Transit Plaza', type: 'Bus Transit Delay', density: 'Moderate', description: 'Light rail shuttle temporarily delayed by traffic. Volunteer dispatch needed.', status: 'Active', time: '23m ago' },
+      ];
+      initialGate = 'Gate A';
+      baseFans = 82500;
+    }
+
+    setGates(initialGates);
+    setIncidents(initialIncidents);
+    setSelectedIncident(initialIncidents[0]);
+    setNewGate(initialGate);
+    setStats({ totalFans: baseFans, gateAverage: '50.5s', activeAlerts: initialIncidents.length });
+  }, [stadium]);
 
   useEffect(() => {
     // Generate initial plan for the default selected incident
@@ -257,10 +301,28 @@ export default function StaffDashboard() {
                 onChange={(e) => setNewGate(e.target.value)}
                 className="w-full bg-stadium-dark border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-stadium-accent"
               >
-                <option value="Gate A">Gate A (North Entrance)</option>
-                <option value="Gate B">Gate B (Transit Plaza)</option>
-                <option value="Gate C">Gate C (East Boulevard)</option>
-                <option value="Gate D">Gate D (Rideshare Loop)</option>
+                {stadium === 'sofi' ? (
+                  <>
+                    <option value="Entry 1">Entry 1 (Century Blvd)</option>
+                    <option value="Entry 5">Entry 5 (Transit Hub)</option>
+                    <option value="Entry 7">Entry 7 (Lake Boulevard)</option>
+                    <option value="Entry 11">Entry 11 (Rideshare Lot)</option>
+                  </>
+                ) : stadium === 'azteca' ? (
+                  <>
+                    <option value="Acceso 1">Acceso 1 (Calzada Tlalpan)</option>
+                    <option value="Acceso 2">Acceso 2 (Estacionamiento)</option>
+                    <option value="Acceso 3">Acceso 3 (Insurgentes)</option>
+                    <option value="Acceso 4">Acceso 4 (Metrobús)</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="Gate A">Gate A (North Entrance)</option>
+                    <option value="Gate B">Gate B (Transit Plaza)</option>
+                    <option value="Gate C">Gate C (East Boulevard)</option>
+                    <option value="Gate D">Gate D (Rideshare Loop)</option>
+                  </>
+                )}
               </select>
             </div>
 

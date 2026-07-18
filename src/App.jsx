@@ -12,6 +12,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(getStoredApiKey());
   const [modelInput, setModelInput] = useState(getStoredModel());
+  const [selectedStadium, setSelectedStadium] = useState('metlife');
   const [isSavedAlert, setIsSavedAlert] = useState(false);
 
   const saveSettings = (e) => {
@@ -89,6 +90,21 @@ export default function App() {
 
             {/* Config & Meta buttons */}
             <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-stadium-card border border-slate-700 rounded-xl px-2.5 py-1.5">
+                <label id="lbl-stadium-selector" htmlFor="stadium-selector" className="text-[10px] text-slate-400 font-bold uppercase tracking-wider hidden md:inline">Venue:</label>
+                <select
+                  id="stadium-selector"
+                  value={selectedStadium}
+                  aria-labelledby="lbl-stadium-selector"
+                  onChange={(e) => setSelectedStadium(e.target.value)}
+                  className="bg-transparent text-xs font-bold text-stadium-accent focus:outline-none cursor-pointer"
+                >
+                  <option value="metlife" className="bg-stadium-card">MetLife Stadium (NY/NJ)</option>
+                  <option value="sofi" className="bg-stadium-card">SoFi Stadium (LA)</option>
+                  <option value="azteca" className="bg-stadium-card">Estadio Azteca (Mexico City)</option>
+                </select>
+              </div>
+
               <button 
                 id="btn-settings-toggle"
                 aria-label="Configure Gemini API Settings"
@@ -142,11 +158,11 @@ export default function App() {
         <section className="transition-all duration-300">
           {activeTab === 'ops' ? (
             <div id="panel-ops-dashboard" role="tabpanel" aria-labelledby="tab-ops-dashboard">
-              <StaffDashboard />
+              <StaffDashboard stadium={selectedStadium} />
             </div>
           ) : (
             <div id="panel-fan-companion" role="tabpanel" aria-labelledby="tab-fan-companion">
-              <FanCompanion />
+              <FanCompanion stadium={selectedStadium} />
             </div>
           )}
         </section>

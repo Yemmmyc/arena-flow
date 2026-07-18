@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { getFanConciergeResponse } from '../services/gemini';
 
-export default function FanCompanion() {
+export default function FanCompanion({ stadium = 'metlife' }) {
   const [messages, setMessages] = useState([
     { id: 1, text: "Welcome to FIFA World Cup 2026™! I am your ArenaFlow Concierge. Ask me anything about stadium gates, accessibility, transportation options, or rules.", sender: 'ai' }
   ]);
@@ -15,8 +15,24 @@ export default function FanCompanion() {
   const [activeMapFeature, setActiveMapFeature] = useState('Overview');
   const chatEndRef = useRef(null);
 
-  const mapHotspots = {
-    Overview: "Select a zone on the map to display wayfinding, elevator access points, and nearest concession stands.",
+  useEffect(() => {
+    setActiveMapFeature('Overview');
+  }, [stadium]);
+
+  const mapHotspots = stadium === 'sofi' ? {
+    Overview: "Select a zone on the SoFi Stadium map to display wayfinding, elevator access points, and nearest concessions.",
+    'Entry 1 & 5': "North entry levels. Features: VIP ticketing, outer plazas, direct access to lower level wheelchair bays.",
+    'Suite Levels': "Levels 3-4 VIP access. Accessible elevators located next to Section 120 and 240.",
+    'Transit Plaza': "LA Metro bus shuttle pick-up/drop-off point on Prairie Avenue. Fast track lanes for group transit.",
+    'Sensory Room': "Located in Section 230 on the main concourse level. Quiet sensory kits available at guest services."
+  } : stadium === 'azteca' ? {
+    Overview: "Seleccione una zona en el mapa de Estadio Azteca para ver rampas, accesos de silla de ruedas y comida.",
+    'Acceso 1 & 2': "Upper and Lower bowl entrances. Handrails and wide paths available for accessibility access.",
+    'Zona Especial': "Designated wheelchair zone at row 10 in all lower blocks. Ramps located directly at sections 112 and 115.",
+    'Estacionamiento': "Special parking for disabled patrons near Acceso 2. Shuttle cart request available via helpdesk.",
+    'Primeros Auxilios': "Medical services located under block 104 and block 302."
+  } : { // metlife
+    Overview: "Select a zone on the MetLife Stadium map to display wayfinding, elevator access points, and nearest concession stands.",
     'Concourse L1': "Gate A & Gate B entrance level. Features: Main Ticketing Office, Accessibility ramps, sensory room in Sec 114, first-aid center, and 14 Cashless concession stations.",
     'Concourse L2': "Suite Levels & Premium Seating access. Elevator access from Section 102. Escalators available at West and East Plazas.",
     'Gate C Plaza': "Gate C entry point. Main transit shuttle pick-up station, taxi loop, and pedestrian walkway leading to the Express Metro station.",

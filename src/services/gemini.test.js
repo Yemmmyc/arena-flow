@@ -58,4 +58,15 @@ describe('ArenaFlow Offline Mock AI Responses', () => {
     expect(plan).toContain('Gate C');
     expect(plan).toContain('Rerouting');
   });
+
+  it('should handle undefined values gracefully in operations mitigation plan', async () => {
+    const plan = await getOperationsMitigationPlan({});
+    expect(plan).toContain('Gate C');
+    expect(plan).toContain('Crowd Density');
+  });
+
+  it('should return default recommendations for empty queries', async () => {
+    const response = await getFanConciergeResponse('', 'en');
+    expect(response).toContain('ArenaFlow FIFA World Cup 2026 Concierge');
+  });
 });
