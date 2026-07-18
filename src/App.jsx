@@ -49,8 +49,13 @@ export default function App() {
             </div>
 
             {/* Toggle Switch */}
-            <nav className="flex bg-stadium-dark/95 border border-slate-800 rounded-xl p-1 max-w-[320px] sm:max-w-md mx-2">
+            <nav role="tablist" aria-label="Role Navigation Switcher" className="flex bg-stadium-dark/95 border border-slate-800 rounded-xl p-1 max-w-[320px] sm:max-w-md mx-2">
               <button 
+                id="tab-ops-dashboard"
+                role="tab"
+                aria-selected={activeTab === 'ops'}
+                aria-controls="panel-ops-dashboard"
+                aria-label="Switch to Venue Operations Hub"
                 onClick={() => setActiveTab('ops')}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   activeTab === 'ops' 
@@ -58,12 +63,17 @@ export default function App() {
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Terminal size={14} />
+                <Terminal size={14} aria-hidden="true" />
                 <span className="hidden sm:inline">Venue Ops Hub</span>
                 <span className="inline sm:hidden">Ops</span>
               </button>
               
               <button 
+                id="tab-fan-companion"
+                role="tab"
+                aria-selected={activeTab === 'fan'}
+                aria-controls="panel-fan-companion"
+                aria-label="Switch to Fan Companion"
                 onClick={() => setActiveTab('fan')}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   activeTab === 'fan' 
@@ -71,7 +81,7 @@ export default function App() {
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Compass size={14} />
+                <Compass size={14} aria-hidden="true" />
                 <span className="hidden sm:inline">Fan Companion</span>
                 <span className="inline sm:hidden">Fan</span>
               </button>
@@ -80,13 +90,15 @@ export default function App() {
             {/* Config & Meta buttons */}
             <div className="flex items-center gap-3">
               <button 
+                id="btn-settings-toggle"
+                aria-label="Configure Gemini API Settings"
                 onClick={() => setShowSettings(true)}
                 className={`p-2 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-300 transition-colors relative ${
                   !getStoredApiKey() ? 'border-stadium-warning/45' : ''
                 }`}
                 title="Configure Gemini API Key"
               >
-                <Settings size={18} />
+                <Settings size={18} aria-hidden="true" />
                 {!getStoredApiKey() && (
                   <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-stadium-warning opacity-75"></span>
@@ -129,9 +141,13 @@ export default function App() {
         {/* Tab Routing */}
         <section className="transition-all duration-300">
           {activeTab === 'ops' ? (
-            <StaffDashboard />
+            <div id="panel-ops-dashboard" role="tabpanel" aria-labelledby="tab-ops-dashboard">
+              <StaffDashboard />
+            </div>
           ) : (
-            <FanCompanion />
+            <div id="panel-fan-companion" role="tabpanel" aria-labelledby="tab-fan-companion">
+              <FanCompanion />
+            </div>
           )}
         </section>
       </main>
@@ -148,11 +164,13 @@ export default function App() {
               Enter your Gemini API key to enable live Generative AI decision mitigations and multilingual concierge lookups.
             </p>
 
-            <form onSubmit={saveSettings} className="space-y-4">
+            <form onSubmit={saveSettings} className="space-y-4" aria-label="API settings configuration">
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">Gemini API Key</label>
+                <label id="lbl-api-key" htmlFor="input-api-key" className="block text-xs font-bold text-slate-300 mb-1.5">Gemini API Key</label>
                 <input 
+                  id="input-api-key"
                   type="password" 
+                  aria-labelledby="lbl-api-key"
                   value={apiKeyInput}
                   onChange={(e) => setApiKeyInput(e.target.value)}
                   placeholder="AIzaSy..."
@@ -161,8 +179,10 @@ export default function App() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">AI Model Selection</label>
+                <label id="lbl-model-select" htmlFor="select-model" className="block text-xs font-bold text-slate-300 mb-1.5">AI Model Selection</label>
                 <select 
+                  id="select-model"
+                  aria-labelledby="lbl-model-select"
                   value={modelInput}
                   onChange={(e) => setModelInput(e.target.value)}
                   className="w-full bg-stadium-dark border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-stadium-accent cursor-pointer"
@@ -179,9 +199,11 @@ export default function App() {
 
               {modelInput === 'custom' || !['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-3.5-flash', 'gemini-2.5-pro', 'gemini-flash-latest', 'gemini-pro-latest'].includes(modelInput) ? (
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1.5">Custom Model Name</label>
+                  <label id="lbl-custom-model" htmlFor="input-custom-model" className="block text-xs font-bold text-slate-300 mb-1.5">Custom Model Name</label>
                   <input 
+                    id="input-custom-model"
                     type="text" 
+                    aria-labelledby="lbl-custom-model"
                     value={modelInput === 'custom' ? '' : modelInput}
                     onChange={(e) => setModelInput(e.target.value)}
                     placeholder="e.g. gemini-2.5-flash"

@@ -90,6 +90,7 @@ export default function FanCompanion() {
             <select 
               value={language}
               onChange={(e) => handleLanguageChange(e.target.value)}
+              aria-label="Select Concierge Language"
               className="bg-transparent text-[11px] font-bold text-slate-300 focus:outline-none cursor-pointer"
             >
               <option value="en" className="bg-stadium-card">English (EN)</option>
@@ -145,10 +146,12 @@ export default function FanCompanion() {
         {/* Input Bar */}
         <div className="p-3 bg-stadium-card border-t border-slate-800 flex gap-2">
           <input 
+            id="input-chat-query"
             type="text" 
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+            aria-label="Ask ArenaFlow Concierge"
             placeholder={
               language === 'es' ? "Pregunta al asistente de ArenaFlow..." : 
               language === 'fr' ? "Demander au concierge ArenaFlow..." :
@@ -157,10 +160,12 @@ export default function FanCompanion() {
             className="flex-1 bg-stadium-dark border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-stadium-accent placeholder:text-slate-500"
           />
           <button 
+            id="btn-send-chat"
             onClick={() => handleSendMessage()}
+            aria-label="Send message"
             className="bg-stadium-accent hover:bg-stadium-accent/80 text-stadium-dark rounded-xl px-4 flex items-center justify-center transition-all shadow-glow"
           >
-            <Send size={14} />
+            <Send size={14} aria-hidden="true" />
           </button>
         </div>
       </div>

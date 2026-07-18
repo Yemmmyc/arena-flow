@@ -244,13 +244,15 @@ export default function StaffDashboard() {
         {/* Raise New Incident / Report Triage Form */}
         <div className="glass-panel rounded-xl p-6">
           <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2 mb-4">
-            <PlusCircle className="text-stadium-accent" size={20} />
+            <PlusCircle className="text-stadium-accent" size={20} aria-hidden="true" />
             Log Operational Incident (Manual Dispatch)
           </h2>
-          <form onSubmit={handleAddIncident} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={handleAddIncident} className="grid grid-cols-1 md:grid-cols-2 gap-4" aria-label="Log new operational incident form">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Target Gate/Location</label>
+              <label id="lbl-target-gate" htmlFor="select-target-gate" className="block text-xs font-semibold text-slate-400 mb-1">Target Gate/Location</label>
               <select 
+                id="select-target-gate"
+                aria-labelledby="lbl-target-gate"
                 value={newGate} 
                 onChange={(e) => setNewGate(e.target.value)}
                 className="w-full bg-stadium-dark border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-stadium-accent"
@@ -263,8 +265,10 @@ export default function StaffDashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Incident Type</label>
+              <label id="lbl-incident-type" htmlFor="select-incident-type" className="block text-xs font-semibold text-slate-400 mb-1">Incident Type</label>
               <select 
+                id="select-incident-type"
+                aria-labelledby="lbl-incident-type"
                 value={newType} 
                 onChange={(e) => setNewType(e.target.value)}
                 className="w-full bg-stadium-dark border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-stadium-accent"
@@ -278,8 +282,10 @@ export default function StaffDashboard() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Incident Details</label>
+              <label id="lbl-incident-details" htmlFor="textarea-incident-details" className="block text-xs font-semibold text-slate-400 mb-1">Incident Details</label>
               <textarea 
+                id="textarea-incident-details"
+                aria-labelledby="lbl-incident-details"
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
                 placeholder="E.g., Ticket scanners down at row 4, resulting in crowd buildup of approx 200 people. Need technician and queue control..."
@@ -290,10 +296,12 @@ export default function StaffDashboard() {
 
             <div className="md:col-span-2 flex justify-end">
               <button 
+                id="btn-submit-incident"
                 type="submit"
+                aria-label="Generate and Triage Incident Plan"
                 className="px-4 py-2.5 bg-stadium-accent hover:bg-stadium-accent/80 text-stadium-dark font-bold text-xs rounded-lg flex items-center gap-2 transition-all"
               >
-                <Sparkles size={14} />
+                <Sparkles size={14} aria-hidden="true" />
                 Generate and Triage Incident
               </button>
             </div>
