@@ -27,9 +27,9 @@ describe('ArenaFlow Gemini Configuration Services', () => {
 
   it('should store and retrieve the API Key correctly', () => {
     expect(getStoredApiKey()).toBe('');
-    setStoredApiKey('  AIzaSyTestKey123  ');
+    setStoredApiKey('  MyTestKey123_abc  ');
     // Trimming test
-    expect(getStoredApiKey()).toBe('AIzaSyTestKey123');
+    expect(getStoredApiKey()).toBe('MyTestKey123_abc');
   });
 
   it('should store and retrieve the model correctly, defaulting to gemini-3.5-flash', () => {
